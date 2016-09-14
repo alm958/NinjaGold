@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="../static/styles/master.css">
+        <title>Ninja Gold</title>
+    </head>
+    <body>
+        <div class="container">
+            <p id='ballance'>Your ninjas current ballance is {{session['gold']}}</p>
+            <div class="building" id='farm'>
+                <h2>Farm</h2>
+                <p>(earn 10-20 coins)</p>
+                <form action="/process_money" method="post">
+                    <input type="hidden" name="building" value="farm" />
+                    <input type="submit" value="Find Gold!"/>
+                </form>
+            </div>
+            <div class="building" id='cave'>
+                <h2>Cave</h2>
+                <p>(earn 5-10 coins)</p>
+                <form action="/process_money" method="post">
+                    <input type="hidden" name="building" value="cave" />
+                    <input type="submit" value="Find Gold!"/>
+                </form>
+            </div>
+            <div class="building" id='house'>
+                <h2>House</h2>
+                <p>(earn 2-5 coins)</p>
+                <form action="/process_money" method="post">
+                    <input type="hidden" name="building" value="house" />
+                    <input type="submit" value="Find Gold!"/>
+                </form>
+            </div>
+            <div class="building" id='casino'>
+                <h2>Casino</h2>
+                <p>(earn/lose 0-50 coins)</p>
+                <form action="/process_money" method="post">
+                    <input type="hidden" name="building" value="casino" />
+                    <input type="submit" value="Find Gold!"/>
+                </form>
+            </div>
+            <p id='report'>Activities:</p>
+            <div class="report">
+                {%if session['state'] == 'process_money'%}
+                    {%for  i in session['log']|reverse%}
+                        {%if i[1] > 0%}
+                            <p style="color:green;">Earned {{i[1]}} coins from the {{i[0]}}!  ({{i[2]}})</p>
+                        {%elif i[1] < 0%}
+                            <p style="color:red;">You lost {{i[1]}} coins at the {{i[0]}}!  ({{i[2]}})</p>
+                        {%else%}
+                            <p style="color:black;">You broke even at the {{i[0]}}!  ({{i[2]}})</p>
+                        {% endif %}
+                    {%endfor%}
+                {% endif %}
+            </div>
+
+
+            <div class="reset">
+                <form action='/reset' method="post">
+                    Click below to reset<br>and play again.<br>
+                    <input type="submit" name="reset" value="reset / play again">
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
